@@ -6,5 +6,5 @@
  go build
  ./cmd
 
- # Istall go(lang)
+ # Install go(lang)
  https://golang.org/doc/install
