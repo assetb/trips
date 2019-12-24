@@ -62,7 +62,7 @@ func NTripsWithMaxStops(start string, end string, nstops int) {
 	routes := core.SearchMaxStops(start, end, nstops-1)
 	fmt.Print("The number of trips starting at ", start, " and ending  ", end, " with a maximum of ", nstops, " stops = ", len(routes), " They are:\n")
 	for i, route := range routes {
-		fmt.Print("route ", i, ": ")
+		fmt.Print("     route ", i, ": ")
 		for _, edge := range route {
 			fmt.Print(edge.Print(), " ")
 		}
@@ -81,7 +81,7 @@ func NTripsWithExactStops(start string, end string, nstops int) {
 	}
 	fmt.Print("The number of trips starting at ", start, " and ending  ", end, " with exactly ", nstops, " stops = ", len(routes), " They are:\n")
 	for i, route := range routes {
-		fmt.Print("route ", i, ": ")
+		fmt.Print("     route ", i, ": ")
 		for _, edge := range route {
 			fmt.Print(edge.Print(), " ")
 		}
