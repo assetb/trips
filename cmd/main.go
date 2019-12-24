@@ -40,7 +40,8 @@ func main() {
 	//==========9. The length of the shortest route (in terms of distance to travel) from B to B.
 	fmt.Print("#9. ", ShortestRouteDistance("B", "B"), "\n")
 
-	//10.The number of different routes from C to C with a distance of less than 30.
+	//==========10.The number of different routes from C to C with a distance of less than 30.
+	fmt.Print("#10. ", NRoutesWithLessDistance("C", "C", 30), "\n")
 
 	var delay string
 	fmt.Scanln(&delay)
@@ -94,4 +95,11 @@ func ShortestRouteDistance(start string, end string) string {
 	core.SearchShortestDistanceInit(14)
 	d := core.SearchShortestDistance(graph.AllGraph[start], start, end)
 	return fmt.Sprint("The length of the shortest route (in terms of distance to travel) from ", start, " to ", end, " = ", d)
+}
+
+//NRoutesWithLessDistance calcs length of shortest route
+func NRoutesWithLessDistance(start string, end string, ifdist int) string {
+	core.SearchRouteWithLessDistanceInit(114)
+	d := core.SearchRouteWithLessDistance(graph.AllGraph[start], start, end, ifdist)
+	return fmt.Sprint("The number of different routes from ", start, " to ", end, " with a distance of less than ", ifdist, " = ", d)
 }
