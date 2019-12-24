@@ -122,24 +122,52 @@ func SearchFirstRouteIter(start string, end string) graph.Route {
 	return nil
 }
 
-//SearchShortestRoute searches first route between start town and end town
-//the code uses recursion to go through graph
-//it stops when end reached
-//it starts to collect edges to route when end town found
-//collecting edges needed to inverse collection
-func SearchShortestRoute(col map[string]int, start string, end string) graph.Route {
+//found checks if route if found
+var found bool
+
+var distance int
+var foundroute graph.Route
+
+//Capacity controls a depth of search
+var Capacity int
+
+//interCapacity is the variable of capacity
+var interCapacity int
+
+//SearchShortestDistance searches and calculates the shortest distance between start town and end town
+//the code goes sequently from start town over all possible directions in each step calculationing distance using map structure
+// each step is a recursionally called function
+//it stops when capacity (the number steps) reached
+//start lived for future use
+func SearchShortestDistance(col map[string]int, start string, end string) int {
 	next := make(map[string]int)
 	for k := range col {
 		if k == end {
-			edge := graph.Edge{StartTown: start, EndTown: end, Weighting: graph.AllGraph[start][end]}
-			route := graph.Route{&edge}
-			return route
+			//edge := graph.Edge{StartTown: start, EndTown: end, Weighting: graph.AllGraph[start][end]}
+			//route := graph.Route{&edge}
+			if !found || distance > col[k] {
+				found = true
+				distance = col[k]
+				//foundroute = route
+			}
+			return distance
+		}
+		interCapacity++
+		if interCapacity >= Capacity {
+			return distance
 		}
 		for h := range graph.AllGraph[k] {
-			next[h] = graph.AllGraph[k][h]
+			next[h] = col[k] + graph.AllGraph[k][h]
 		}
 	}
-	return SearchShortestRoute(next, start, end)
+	return SearchShortestDistance(next, start, end)
+}
+
+//SearchShortestDistanceInit inits SearchShortestRoute
+func SearchShortestDistanceInit(capacity int) {
+	found = false
+	interCapacity = 0
+	Capacity = capacity
 }
 
 //SearchExactStops searches with maximum stops

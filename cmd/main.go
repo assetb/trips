@@ -34,8 +34,12 @@ func main() {
 	fmt.Print("#7. ")
 	NTripsWithExactStops("A", "C", 4)
 
-	//8. The length of the shortest route (in terms of distance to travel) from A to C.
-	//9. The length of the shortest route (in terms of distance to travel) from B to B.
+	//==========8. The length of the shortest route (in terms of distance to travel) from A to C.
+	fmt.Print("#8. ", ShortestRouteDistance("A", "C"), "\n")
+
+	//==========9. The length of the shortest route (in terms of distance to travel) from B to B.
+	fmt.Print("#9. ", ShortestRouteDistance("B", "B"), "\n")
+
 	//10.The number of different routes from C to C with a distance of less than 30.
 
 	var delay string
@@ -71,7 +75,7 @@ func NTripsWithExactStops(start string, end string, nstops int) {
 	interroutes := core.SearchMaxStops(start, end, nstops-1)
 	routes := make([]graph.Route, 0)
 	for _, r := range interroutes {
-		if len(r) == 4 {
+		if len(r) == nstops {
 			routes = append(routes, r)
 		}
 	}
@@ -83,4 +87,11 @@ func NTripsWithExactStops(start string, end string, nstops int) {
 		}
 		fmt.Print("\n")
 	}
+}
+
+//ShortestRouteDistance calcs length of shortest route
+func ShortestRouteDistance(start string, end string) string {
+	core.SearchShortestDistanceInit(14)
+	d := core.SearchShortestDistance(graph.AllGraph[start], start, end)
+	return fmt.Sprint("The length of the shortest route (in terms of distance to travel) from ", start, " to ", end, " = ", d)
 }
