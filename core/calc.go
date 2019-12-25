@@ -1,6 +1,7 @@
 package core
 
 import (
+	"fmt"
 	"strings"
 	"trainsandtowns/graph"
 )
@@ -93,91 +94,84 @@ func SearchMaxStops(start string, end string, nstops int) []graph.Route {
 	return routes
 }
 
-//SearchFirstRouteIter searches first route between start town and end town
-//the code uses recursion to go through graph
-//it stops when end reached
-//it starts to collect edges to route when end town found
-//collecting edges needed to inverse collection
-func SearchFirstRouteIter(start string, end string) graph.Route {
-	route := make(graph.Route, 0)
-	for k := range graph.AllGraph[start] {
-		if k == end {
-			edge := graph.Edge{StartTown: start, EndTown: end, Weighting: graph.AllGraph[start][end]}
-			route = graph.Route{&edge}
-			return route
-		}
+//SearchShortestDistance searches and calculates the shortest distance between start town and end town
+//code description see at SearchShortestDistanceImpl function comments
+func SearchShortestDistance(start string, end string) (int, string) {
+	distance = -1
+	interCapacity = 0
+	if Capacity <= 0 {
+		Capacity = 20
 	}
-	for k := range graph.AllGraph[start] {
-		interroute := SearchFirstRouteIter(k, end)
-		if interroute != nil {
-			edge := graph.Edge{StartTown: start, EndTown: k, Weighting: graph.AllGraph[start][k]}
-			route = graph.Route{&edge}
-			for _, e := range interroute {
-				route = append(route, e)
-				return route
-			}
-		}
-	}
-	return nil
+	d, r := searchShortestDistanceImpl(graph.AllGraph[start], end)
+	r = fmt.Sprint(start, r)
+	return d, r
 }
 
-//found checks if route if found
-var found bool
-
-var distance int
+//SearchRoutesWithDistanceLessThen searches and calculates the shortest distance between start town and end town
+//code description see at SearchRoutesWithDistanceLessThen function comments
+func SearchRoutesWithDistanceLessThen(start string, end string, ifdist int) (int, []string) {
+	nroutewithlessdistance = 0
+	interCapacity = 0
+	if Capacity <= 0 {
+		Capacity = 20
+	}
+	routes = make([]string, 0)
+	d, rr := searchRoutesWithDistanceLessThenImpl(graph.AllGraph[start], end, ifdist)
+	rrr := make([]string, 0)
+	for _, r := range rr {
+		r = fmt.Sprint(start, r)
+		rrr = append(rrr, r)
+	}
+	return d, rrr
+}
 
 //Capacity controls a depth of search
 var Capacity int
 
-//interCapacity is the variable of capacity
+//SearchCapacityInit inits search capacity
+func SearchCapacityInit(capacity int) {
+	Capacity = capacity
+}
+
+var distance int
+var route string
 var interCapacity int
 
-//SearchShortestDistance searches and calculates the shortest distance between start town and end town
+//searchShortestDistanceImpl searches and calculates the shortest distance between start town and end town
 //the code goes sequently from start town over all possible directions in each step calculationing distance using map structure
 // each step is a recursionally called function
 //it stops when capacity (the number steps) reached
 //start lived for future use
-func SearchShortestDistance(col map[string]int, start string, end string) int {
+func searchShortestDistanceImpl(col map[string]int, end string) (int, string) {
 	next := make(map[string]int)
 	for k := range col {
-		if k == end {
-			if !found || distance > col[k] {
-				found = true
+		l := k[len(k)-1:]
+		if l == end {
+			if distance < 0 || distance > col[k] {
 				distance = col[k]
+				route = k
 			}
 		}
-		for h := range graph.AllGraph[k] {
-			_, ok := next[h]
-			if !ok || next[h] > col[k]+graph.AllGraph[k][h] {
-				next[h] = col[k] + graph.AllGraph[k][h]
-			}
+		for h := range graph.AllGraph[l] {
+			next[k+h] = col[k] + graph.AllGraph[l][h]
 		}
 	}
 	interCapacity++
 	if interCapacity >= Capacity {
-		return distance
+		return distance, route
 	}
-	return SearchShortestDistance(next, start, end)
-}
-
-//SearchShortestDistanceInit inits SearchShortestRoute
-func SearchShortestDistanceInit(capacity int) {
-	found = false
-	distance = 0
-	interCapacity = 0
-	Capacity = capacity
-
+	return searchShortestDistanceImpl(next, end)
 }
 
 var nroutewithlessdistance int
 var routes []string
 
-//SearchRouteWithLessDistance searches and calculates the shortest distance between start town and end town
+//searchRoutesWithDistanceLessThenImpl searches and calculates the shortest distance between start town and end town
 //the code goes sequently from start town over all possible directions in each step calculationing distance using map structure
 // each step is a recursionally called function
 //it stops when capacity (the number steps) reached
 //start lived for future use
-func SearchRouteWithLessDistance(col map[string]int, start string, end string, ifdist int) (int, []string) {
+func searchRoutesWithDistanceLessThenImpl(col map[string]int, end string, ifdist int) (int, []string) {
 	next := make(map[string]int)
 	for k := range col {
 		l := k[len(k)-1:]
@@ -195,18 +189,8 @@ func SearchRouteWithLessDistance(col map[string]int, start string, end string, i
 	if interCapacity >= Capacity {
 		return nroutewithlessdistance, routes
 	}
-	SearchRouteWithLessDistance(next, start, end, ifdist)
+	searchRoutesWithDistanceLessThenImpl(next, end, ifdist)
 	return nroutewithlessdistance, routes
-}
-
-//SearchRouteWithLessDistanceInit inits SearchShortestRoute
-func SearchRouteWithLessDistanceInit(capacity int) {
-	found = false
-	distance = 0
-	interCapacity = 0
-	Capacity = capacity
-	nroutewithlessdistance = 0
-	routes = make([]string, 0)
 }
 
 //SearchExactStops searches with maximum stops

@@ -93,15 +93,13 @@ func NTripsWithExactStops(start string, end string, nstops int) {
 
 //ShortestRouteDistance calcs length of shortest route
 func ShortestRouteDistance(start string, end string) string {
-	core.SearchShortestDistanceInit(14)
-	d := core.SearchShortestDistance(graph.AllGraph[start], start, end)
-	return fmt.Sprint("The length of the shortest route (in terms of distance to travel) from ", start, " to ", end, " = ", d)
+	d, route := core.SearchShortestDistance(start, end)
+	return fmt.Sprint("The length of the shortest route (in terms of distance to travel) from ", start, " to ", end, " = ", d, " It is: ", route, " \n")
 }
 
 //NRoutesWithLessDistance calcs length of shortest route
 func NRoutesWithLessDistance(start string, end string, ifdist int) {
-	core.SearchRouteWithLessDistanceInit(14)
-	d, routes := core.SearchRouteWithLessDistance(graph.AllGraph[start], start, end, ifdist)
+	d, routes := core.SearchRoutesWithDistanceLessThen(start, end, ifdist)
 	fmt.Print("The number of different routes from ", start, " to ", end, " with a distance of less than ", ifdist, " = ", d, " They are:\n")
 	for i, route := range routes {
 		fmt.Print("     route ", i, ": ", route)
