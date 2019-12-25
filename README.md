@@ -1,5 +1,5 @@
 # Trains and Towns
- Initial dewcription of the problem see ...
+ Initial description of the problem see ...
 
  # How to execute
  1. Provide graph data in db/input1.dat file. First Test data provided.
