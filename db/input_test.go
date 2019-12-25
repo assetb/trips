@@ -25,7 +25,7 @@ func TestTextRead(t *testing.T) {
 			for i := 0; i < len(TestEdges); i++ {
 				fmt.Println("Edges: ", graph.ObjEdges[i])
 				fmt.Println("Test: ", TestEdges[i])
-				if got := graph.ObjEdges[i].Compare(TestEdges[i]); !got {
+				if got := graph.ObjEdges[i].CompareE(TestEdges[i]); !got {
 					t.Errorf("name = %v, TextRead() = %v, want %v", tt.name, got, tt.want)
 				}
 			}

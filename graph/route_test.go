@@ -51,7 +51,7 @@ func TestGraph_FindEdge(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := tt.g.FindEdge(tt.args.start, tt.args.end); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("Graph.FindEdge() = %v, want %v", got, tt.want)
+				t.Errorf("FindEdge() = %v, want %v", got, tt.want)
 			}
 		})
 	}

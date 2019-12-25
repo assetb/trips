@@ -13,9 +13,9 @@ type EdgesMapType map[string]map[string]int
 var EdgesMap EdgesMapType
 
 //FindEdge finds edge by towns
-func (graph ObjEdgesType) FindEdge(start, end string) *Edge {
-	for _, edge := range graph {
-		if edge.Compare2(start, end) {
+func (edges ObjEdgesType) FindEdge(start, end string) *Edge {
+	for _, edge := range edges {
+		if edge.CompareS(start, end) {
 			return &edge
 		}
 	}
@@ -23,10 +23,10 @@ func (graph ObjEdgesType) FindEdge(start, end string) *Edge {
 }
 
 //FindEdge finds edge by towns
-func (graph EdgesMapType) FindEdge(start, end string) *Edge {
-	_, ok := graph[start][end]
+func (edges EdgesMapType) FindEdge(start, end string) *Edge {
+	_, ok := edges[start][end]
 	if ok {
-		edge := Edge{StartTown: start, EndTown: end, Weighting: graph[start][end]}
+		edge := Edge{StartTown: start, EndTown: end, Weighting: edges[start][end]}
 		return &edge
 	}
 	return nil
