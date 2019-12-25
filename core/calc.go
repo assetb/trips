@@ -179,23 +179,22 @@ var nroutewithlessdistance int
 func SearchRouteWithLessDistance(col map[string]int, start string, end string, ifdist int) int {
 	next := make(map[string]int)
 	for k := range col {
-		if k == end {
+		l := k[len(k)-1:]
+		if l == end {
 			if col[k] < ifdist {
 				nroutewithlessdistance++
 			}
 		}
-		for h := range graph.AllGraph[k] {
-			_, ok := next[h]
-			if !ok || next[h] > col[k]+graph.AllGraph[k][h] {
-				next[h] = col[k] + graph.AllGraph[k][h]
-			}
+		for h := range graph.AllGraph[l] {
+			next[k+h] = col[k] + graph.AllGraph[l][h]
 		}
 	}
 	interCapacity++
 	if interCapacity >= Capacity {
 		return nroutewithlessdistance
 	}
-	return SearchRouteWithLessDistance(next, start, end, ifdist)
+	SearchRouteWithLessDistance(next, start, end, ifdist)
+	return nroutewithlessdistance
 }
 
 //SearchRouteWithLessDistanceInit inits SearchShortestRoute
