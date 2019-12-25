@@ -18,7 +18,7 @@ func DataRead(filename string) {
 	}
 	defer file.Close()
 
-	graph.AllGraph = make(map[string]map[string]int)
+	graph.EdgesMap = make(map[string]map[string]int)
 
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
@@ -32,11 +32,11 @@ func DataRead(filename string) {
 			if err != nil {
 				middleware.Error("Error with assignment values to edgw ", err)
 			}
-			graph.AllEdges = append(graph.AllEdges, edge)
-			g, ok := graph.AllGraph[edge.StartTown]
+			graph.ObjEdges = append(graph.ObjEdges, edge)
+			g, ok := graph.EdgesMap[edge.StartTown]
 			if !ok {
 				g = make(map[string]int)
-				graph.AllGraph[edge.StartTown] = g
+				graph.EdgesMap[edge.StartTown] = g
 			}
 			g[edge.EndTown] = edge.Weighting
 		}

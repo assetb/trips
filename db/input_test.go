@@ -23,9 +23,9 @@ func TestTextRead(t *testing.T) {
 				//				{StartTown: "B", EndTown: "C", Weighting: 4},
 			}
 			for i := 0; i < len(TestEdges); i++ {
-				fmt.Println("Edges: ", graph.AllEdges[i])
+				fmt.Println("Edges: ", graph.ObjEdges[i])
 				fmt.Println("Test: ", TestEdges[i])
-				if got := graph.AllEdges[i].Compare(TestEdges[i]); !got {
+				if got := graph.ObjEdges[i].Compare(TestEdges[i]); !got {
 					t.Errorf("name = %v, TextRead() = %v, want %v", tt.name, got, tt.want)
 				}
 			}

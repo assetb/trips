@@ -51,11 +51,11 @@ func main() {
 //RouteDistance prints the distance of given route
 func RouteDistance(sample string) string {
 	split := strings.Split(sample, "-")
-	route := core.MakeRouteFromTownSeq(split)
+	route := core.MakeRouteFromStrSeq(split)
 	if route == nil {
 		return fmt.Sprintf("NO SUCH ROUTE")
 	}
-	d := core.Distance(route)
+	d := route.Distance()
 	return fmt.Sprintf("The distance of the route %v is %v", sample, d)
 }
 

@@ -2,47 +2,14 @@ package core
 
 import (
 	"fmt"
-	"strings"
 	"trainsandtowns/graph"
 )
 
-//Distance calculates the length of route
-func Distance(route graph.Route) int {
-	var sum int
-	sum = 0
-	for _, edge := range route {
-		sum = sum + edge.Weighting
-	}
-	return sum
-}
-
-//GetOutTownEdges gets all edges starting from given town
-func GetOutTownEdges(town string) []graph.Edge {
-	edges := make([]graph.Edge, 0)
-	for _, edge := range graph.AllEdges {
-		if strings.EqualFold(edge.StartTown, town) {
-			edges = append(edges, edge)
-		}
-	}
-	return edges
-}
-
-//GetInTownEdges gets all edges ending in given town
-func GetInTownEdges(town string) []graph.Edge {
-	edges := make([]graph.Edge, 0)
-	for _, edge := range graph.AllEdges {
-		if strings.EqualFold(edge.EndTown, town) {
-			edges = append(edges, edge)
-		}
-	}
-	return edges
-}
-
-//MakeRouteFromTownSeq makes route over given towns
-func MakeRouteFromTownSeq(seq []string) graph.Route {
+//MakeRouteFromStrSeq makes route from the string of given towns
+func MakeRouteFromStrSeq(seq []string) graph.Route {
 	route := make(graph.Route, 0)
 	for i := 1; i < len(seq); i++ {
-		edge := graph.AllEdges.FindEdge(seq[i-1], seq[i])
+		edge := graph.ObjEdges.FindEdge(seq[i-1], seq[i])
 		if edge == nil {
 			return nil
 		}
@@ -51,26 +18,16 @@ func MakeRouteFromTownSeq(seq []string) graph.Route {
 	return route
 }
 
-//Search is a Universal search
-func Search(start string, end string, condition func(string, string) bool) {
-	for k := range graph.AllGraph[start] {
-		if condition(start, end) {
-
-		}
-		Search(k, end, condition)
-	}
-}
-
-//SearchMaxStops searches with maximum stops
+//SearchMaxStops searches routes between start town and end town with maximum n stops
 //the code uses recursion to go through graph
 //it stops when number of stops achieved
 //it starts to collect edges to route when end town found
 //collecting edges needed to inverse collection
 func SearchMaxStops(start string, end string, nstops int) []graph.Route {
 	routes := make([]graph.Route, 0)
-	for k := range graph.AllGraph[start] {
+	for k := range graph.EdgesMap[start] {
 		if k == end {
-			edge := graph.Edge{StartTown: start, EndTown: end, Weighting: graph.AllGraph[start][end]}
+			edge := graph.Edge{StartTown: start, EndTown: end, Weighting: graph.EdgesMap[start][end]}
 			route := graph.Route{&edge}
 			routes = append(routes, route)
 		}
@@ -78,10 +35,10 @@ func SearchMaxStops(start string, end string, nstops int) []graph.Route {
 	if nstops == 0 {
 		return routes
 	}
-	for k := range graph.AllGraph[start] {
+	for k := range graph.EdgesMap[start] {
 		interroutes := SearchMaxStops(k, end, nstops-1)
 		if interroutes != nil {
-			edge := graph.Edge{StartTown: start, EndTown: k, Weighting: graph.AllGraph[start][k]}
+			edge := graph.Edge{StartTown: start, EndTown: k, Weighting: graph.EdgesMap[start][k]}
 			for _, r := range interroutes {
 				rr := graph.Route{&edge}
 				for _, e := range r {
@@ -102,7 +59,7 @@ func SearchShortestDistance(start string, end string) (int, string) {
 	if Capacity <= 0 {
 		Capacity = 20
 	}
-	d, r := searchShortestDistanceImpl(graph.AllGraph[start], end)
+	d, r := searchShortestDistanceImpl(graph.EdgesMap[start], end)
 	r = fmt.Sprint(start, r)
 	return d, r
 }
@@ -116,7 +73,7 @@ func SearchRoutesWithDistanceLessThen(start string, end string, ifdist int) (int
 		Capacity = 20
 	}
 	routes = make([]string, 0)
-	d, rr := searchRoutesWithDistanceLessThenImpl(graph.AllGraph[start], end, ifdist)
+	d, rr := searchRoutesWithDistanceLessThenImpl(graph.EdgesMap[start], end, ifdist)
 	rrr := make([]string, 0)
 	for _, r := range rr {
 		r = fmt.Sprint(start, r)
@@ -152,8 +109,8 @@ func searchShortestDistanceImpl(col map[string]int, end string) (int, string) {
 				route = k
 			}
 		}
-		for h := range graph.AllGraph[l] {
-			next[k+h] = col[k] + graph.AllGraph[l][h]
+		for h := range graph.EdgesMap[l] {
+			next[k+h] = col[k] + graph.EdgesMap[l][h]
 		}
 	}
 	interCapacity++
@@ -181,8 +138,8 @@ func searchRoutesWithDistanceLessThenImpl(col map[string]int, end string, ifdist
 				routes = append(routes, k)
 			}
 		}
-		for h := range graph.AllGraph[l] {
-			next[k+h] = col[k] + graph.AllGraph[l][h]
+		for h := range graph.EdgesMap[l] {
+			next[k+h] = col[k] + graph.EdgesMap[l][h]
 		}
 	}
 	interCapacity++
@@ -201,9 +158,9 @@ func searchRoutesWithDistanceLessThenImpl(col map[string]int, end string, ifdist
 func SearchExactStops(start string, end string, nstops int) []graph.Route {
 	routes := make([]graph.Route, 0)
 	//	found := false
-	for k := range graph.AllGraph[start] {
+	for k := range graph.EdgesMap[start] {
 		if nstops == 0 && k == end {
-			edge := graph.Edge{StartTown: start, EndTown: end, Weighting: graph.AllGraph[start][end]}
+			edge := graph.Edge{StartTown: start, EndTown: end, Weighting: graph.EdgesMap[start][end]}
 			route := graph.Route{&edge}
 			routes = append(routes, route)
 			//			found = true
@@ -215,11 +172,11 @@ func SearchExactStops(start string, end string, nstops int) []graph.Route {
 		//		}
 		//		return nil
 	}
-	for k := range graph.AllGraph[start] {
+	for k := range graph.EdgesMap[start] {
 		interroutes := SearchExactStops(k, end, nstops-1)
 		//collecting to routes only if route exists
 		if interroutes != nil {
-			edge := graph.Edge{StartTown: start, EndTown: k, Weighting: graph.AllGraph[start][k]}
+			edge := graph.Edge{StartTown: start, EndTown: k, Weighting: graph.EdgesMap[start][k]}
 			for _, r := range interroutes {
 				rr := graph.Route{&edge}
 				for _, e := range r {
@@ -233,4 +190,14 @@ func SearchExactStops(start string, end string, nstops int) []graph.Route {
 	return routes
 	//	}
 	//	return nil
+}
+
+//Search is a Universal search
+func Search(start string, end string, condition func(string, string) bool) {
+	for k := range graph.EdgesMap[start] {
+		if condition(start, end) {
+
+		}
+		Search(k, end, condition)
+	}
 }

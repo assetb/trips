@@ -33,7 +33,7 @@ func TestRoute_Append(t *testing.T) {
 func TestGraph_FindEdge(t *testing.T) {
 	edge1 := Edge{StartTown: "A", EndTown: "B", Weighting: 1}
 	edge2 := Edge{StartTown: "C", EndTown: "D", Weighting: 1}
-	var g Graph
+	var g ObjEdgesType
 	g = append(g, edge1)
 	g = append(g, edge2)
 	type args struct {
@@ -42,7 +42,7 @@ func TestGraph_FindEdge(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		g    Graph
+		g    ObjEdgesType
 		args args
 		want *Edge
 	}{
