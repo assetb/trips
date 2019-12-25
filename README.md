@@ -1,4 +1,3 @@
-# trainsandtowns
 # Trains and Towns
  Initial dewcription of the problem see ...
 
