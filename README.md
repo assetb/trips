@@ -1,5 +1,5 @@
 # trainsandtowns
- Trains and Towns
+# Trains and Towns
  Initial dewcription of the problem see ...
 
  # How to execute
@@ -13,10 +13,10 @@
  https://golang.org/doc/install
 
 # Code Description
-Objects like Town, Edge, Route are introduced to describe problem and to be used on business level
-This version uses Town as a string with 1 length
-Edge describes a elementary direct route between two towns without in-between towns or stops
-Route is a collection of edges
+Objects like Town, Edge, Route are introduced to describe problem and to be used on business level.
+This version uses Town as a string with 1 length.
+Edge describes a elementary direct route between two towns without in-between towns or stops.
+Route is a collection of edges.
 
 To solve problems it is used two approaches to handle a given collection of routes.
 First one collects them in object collection.
