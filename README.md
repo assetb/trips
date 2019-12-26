@@ -6,7 +6,9 @@
  2. do
 
 >cd cmd
+
 >go build
+
 >./cmd
 
  # Install go(lang)
