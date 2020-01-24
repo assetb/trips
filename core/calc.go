@@ -2,7 +2,7 @@ package core
 
 import (
 	"fmt"
-	"trainsandtowns/graph"
+	"trips/graph"
 )
 
 //MakeRouteFromStrSeq makes route from the string of given towns

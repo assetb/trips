@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 	"strings"
-	"trainsandtowns/core"
-	"trainsandtowns/db"
-	"trainsandtowns/graph"
+	"trips/core"
+	"trips/db"
+	"trips/graph"
 )
 
 func main() {

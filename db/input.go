@@ -5,8 +5,8 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	"trainsandtowns/graph"
-	"trainsandtowns/middleware"
+	"trips/graph"
+	"trips/middleware"
 )
 
 //DataRead reads data from a input file

@@ -3,7 +3,7 @@ package db
 import (
 	"fmt"
 	"testing"
-	"trainsandtowns/graph"
+	"trips/graph"
 )
 
 func TestTextRead(t *testing.T) {

@@ -2,7 +2,7 @@ package core
 
 import (
 	"testing"
-	"trainsandtowns/graph"
+	"trips/graph"
 )
 
 func TestDistance(t *testing.T) {
